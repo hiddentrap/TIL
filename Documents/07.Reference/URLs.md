@@ -10,6 +10,8 @@
 
 [튜토리얼](https://data-flair.training/blogs/install-django/)
 
+[TDD 튜토리얼](https://www.obeythetestinggoat.com/book/chapter_philosophy_and_refactoring.html)
+
 ## Java
 
 [튜토리얼](https://data-flair.training/blogs/java-tutorials-home/)

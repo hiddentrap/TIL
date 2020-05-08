@@ -67,6 +67,10 @@ loginUserAndGetGroups() 이런 함수가 나오면 안된다. 두 개로 쪼갤 
 
 ​	확장에는 열려있고 수정에는 닫혀있어야 한다.
 
+즉, 클래스, 메서드, 모듈 등의 Entity는 Interface와 같은 추상화 클래스를 통해 기능을 변경하거나 확장을 하는 것은 가능하나, 외부에서 참조하는 코드는 수정하지 않아야 한다.
+
+만약 CalcMethod에서 getResult()를 정의하는 인터페이스를 참조하여 사용한다고 하였을때 getResult()를 구현하는 구현 클래스 Plus, Minus에 더해 Multiple, Devide 구현 클래스를 추가하여 기능은 확장할 수 있어야 하지만, 기능을 추가한다고 해서 이를 참조하는 CalcMethod를 수정하게 하면 안된다는 의미
+
 ### LSP
 
 ​	
