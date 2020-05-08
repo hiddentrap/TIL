@@ -4,6 +4,8 @@
 
 [튜토리얼](https://data-flair.training/blogs/python-tutorials-home/)
 
+[CheatSheet](https://github.com/DemiHwang/pysheeet)
+
 ## Django
 
 [Django 공식문서](https://docs.djangoproject.com/ko/3.0/)
