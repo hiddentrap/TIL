@@ -26,6 +26,7 @@ class HomePageTest(TestCase):
         # Then
         self.assertTrue(html.startswith('<!DOCTYPE html>'))
         self.assertIn('<title>서버관리</title>', html)
+        self.assertIn('<h1>서버관리</h1>', html)
         self.assertTrue(html.strip().endswith('</html>'))
 
     def test_uses_home_template(self):
