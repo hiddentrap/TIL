@@ -51,3 +51,27 @@ $ git pull origin master
 ```
 
 ​	pull <원격저장소 이름> <브랜치 이름>
+
+### 신규 추가 파일없이 변경 내용 커밋하기
+
+```
+$ git commit -a -m 'second commit'
+```
+
+​	commit -a: 모든 변경 내용을 관리 가능 파일(이전에 커밋한 이력이 있는 파일)에 자동으로 반영한다
+
+### 신규 파일 추가하고 변경 내용 확인 및 커밋하기
+
+```
+$ git status
+$ git add .
+$ git diff
+$ git commit -am 'third commit'
+```
+
+### 커밋 히스토리 확인
+
+```
+$ git log --oneline
+```
+

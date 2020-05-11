@@ -6,6 +6,10 @@
 
 /functional_tests.py
 
+기능 테스트 = Use-Case 테스트는 사람이 이해가능한 스토리를 가지고 있어야 하며, 이를 정의하기 위해 테스트 코드에 주석을 기록한다. 스토리는 애플리케이션의 요구사항에서 도출된다.
+
+[unittest](https://docs.python.org/ko/3/library/unittest.html)
+
 ```python
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
@@ -15,6 +19,7 @@ import unittest
 class NewVisitorTest(unittest.TestCase):
     def setUp(self):
         self.browser = webdriver.Chrome(ChromeDriverManager().install())
+        self.browser.implicitly_wait(3)
 
     def tearDown(self):
         self.browser.quit()
@@ -33,6 +38,18 @@ class NewVisitorTest(unittest.TestCase):
 
         # 사용자는 엔터를 입력하고, 페이지의 서버 리스트는 업데이트 된다.
         # 1: SERVER01
+        
+        # 추가 서버 자산을 등록할 수 있는 여분의 입력 창이 존재한다.
+        # 다시 "SERVER02"를 입력한다.
+        
+        # 페이지는 다시 갱신되고, 두 개의 서버가 리스트에 보인다.
+        # 사용자는 서버 리스트가 입력한 목록을 저장하고 있는지 궁금하다.
+        # 사이트는 사용자를 위한 특정 URL을 생성해준다
+        # 이때 URL에 대한 설명도 함께 제공된다.
+        
+        # 해당 URL에 접속하면 서버 목록이 그대로 있는 것을 확인할 수 있다.
+        
+        # 사용자는 만족하고 브라우저를 닫는다.
 
 
 if __name__ == '__main__':

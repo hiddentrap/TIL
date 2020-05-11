@@ -130,3 +130,12 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# IntelliJ
+.idea
+.idea/.gitignore
+.idea/code-comments.xml
+.idea/code.iml
+.idea/inspectionProfiles/
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
