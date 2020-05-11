@@ -1,6 +1,8 @@
 # Django Coding
 
-## FunctionalTest 작성
+## FunctionalTest(w in memory db) 작성
+
+: End-to-End Test(w real db)
 
 /functional_tests.py
 
