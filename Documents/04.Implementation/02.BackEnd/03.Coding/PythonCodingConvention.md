@@ -11,3 +11,4 @@
 | 상수명             | - 모듈 단위에서만 정의 CONSTANT_VAL                          |
 |                    |                                                              |
 
+[정리필요](https://dailyheumsi.tistory.com/222)
