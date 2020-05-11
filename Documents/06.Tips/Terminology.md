@@ -21,3 +21,9 @@
 영속성있는, 상태 추적이 가능한, 저장소에 저장되는
 
 ##### Functional Test = Acceptance Test = End to End Test = Black Box Test = UseCase Test
+
+사용자 관점에서 애플리케이션 외부를 테스트
+
+##### UnitTest
+
+개발자 관접에서 내부를 테스트
