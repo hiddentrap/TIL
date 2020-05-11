@@ -19,3 +19,5 @@
 ##### stateful
 
 영속성있는, 상태 추적이 가능한, 저장소에 저장되는
+
+##### Functional Test = Acceptance Test = End to End Test = Black Box Test = UseCase Test

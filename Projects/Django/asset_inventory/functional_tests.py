@@ -9,6 +9,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 class NewVisitorTest(unittest.TestCase):
     def setUp(self):
         self.browser = webdriver.Chrome(ChromeDriverManager().install())
+        self.browser.implicitly_wait(3)
 
     def tearDown(self):
         self.browser.quit()
