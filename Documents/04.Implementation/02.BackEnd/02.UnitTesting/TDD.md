@@ -71,5 +71,36 @@
 수 : 90점 이상, 우 : 80~89점, 미 : 70~79점, 양 : 60~69점, 가 : 59점 미만에 대하여
 
 - **동등분할**은 대표값으로 95점, 85점, 75점, 65점, 55점을 입력
-
 - **경계값 분석**은 90점, 89점, 80점, 79점, 70점, 69점, 60점, 59점을 입력
+
+## 조합 테스트 범위 설정
+
+### Pairewise testing
+
+#### Tool - PICT
+
+##### Download
+
+[PICT Tool](http://www.pairwise.org/pict/win/pict.exe)
+
+[GitHub](https://github.com/microsoft/pict)
+
+##### 사용법
+
+```
+Type:          Single, Span, Stripe, Mirror, RAID-5
+Size:          10, 100, 500, 1000, 5000, 10000, 40000
+Format method: Quick, Slow
+File system:   FAT, FAT32, NTFS
+Cluster size:  512, 1024, 2048, 4096, 8192, 16384, 32768, 65536
+Compression:   On, Off
+```
+
+Test Data의 경우의 수를 txt파일로 기술하고,
+
+```
+pict.exe testData.txt > testCase.xls
+```
+
+실행하면, 테스트해야할 조합의 경우의 수를 만들어 준다.
+
