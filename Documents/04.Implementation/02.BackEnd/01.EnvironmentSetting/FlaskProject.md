@@ -1,4 +1,6 @@
-# Flask Folder Strucutre
+# Flask Project
+
+## Project Structure
 
 - config.py
 - domain : 도메인 모델, 클래스당 파일 1개 (helper parent class, Entity, ValueObject, Aggregate, exceptions.py, commands.py, events.py 등)
