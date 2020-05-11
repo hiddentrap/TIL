@@ -39,7 +39,7 @@ Domain Service: 도메인 모델에 속해있는 로직
 - 순수한 web app(db가 필요 없는)이라면 controllers/view 함수에 모든 유즈 케이스를 집중시킬수 있다.
 - 그럼에도 불구하고 추상화가 늘어난다.
 - 너무 많은 로직을 서비스 레이어에 몰아 넣으면 Anemic Domain 안티 패턴이 될 수 있다. 
-- 서비스 레이어 없이 controller의 로직을 domain model로 배치하는 "fat models, thins controllers"를 고려해볼 수 도 있다.
+- 서비스 레이어 없이 controller의 로직을 domain model로 배치하는 "fat models, thins controllers"를 고려해볼 수 도 있다. <- 고려하지 마라.. 옛날거다 Model1 방식
 
 ## Tests for Service Function
 
