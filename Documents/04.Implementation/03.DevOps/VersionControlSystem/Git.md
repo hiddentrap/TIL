@@ -75,3 +75,31 @@ $ git commit -am 'third commit'
 $ git log --oneline
 ```
 
+### 브랜치 목록 조회
+
+#### 로컬
+
+```
+$ git branch --list
+```
+
+#### 원격
+
+```
+$ git branch -r
+```
+
+#### 로컬 + 원격
+
+```
+$ git branch -a
+```
+
+#### 로컬 + 
+
+### 잘못 생성된 브랜치 삭제
+
+```
+$ git branch --delete bn
+```
+

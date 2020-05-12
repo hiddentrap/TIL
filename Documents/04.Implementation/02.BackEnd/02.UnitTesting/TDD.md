@@ -4,6 +4,22 @@
 
 내가 작성한 모든 코드는 테스트 되어야 한다.
 
+## Test 종류
+
+### Functional Test : End to End Test : UseCase Test
+
+​	HTTP API를 대상으로 한다. 기능의 동작을 시현하기 위한 목적으로 작성한다.
+
+### Service Layer Test
+
+​	각 테스트는 기능과 페이크 I/O의 코드 실행 경로를 커버하는 경향이 있으며, 비지니스 로직의 시작과 끝을 테스트 한다
+
+- 서비스 레이어 테스트를 작성할 때는 도메인 오브젝트 대신 primitive를 사용하여 도메인 모델과 의존성을 끊어 순수한 테스트를 작성할 수 있도록 한다.
+
+### Domain Model Test
+
+​	단위 범위에 집중적인 테스트 커버리지를 갖으며 엄격한 피드백을 줄 수 있다. 후에 서비스 레이어 테스트에 의해 기능이 테스트 될수 있으면 삭제하도록 한다.
+
 ## WorkFlow
 
 **Functional Test 작성 - Unit Test 작성 - Code 작성 - Functional Test 성공시 Refactoring**
