@@ -27,3 +27,5 @@
 ##### UnitTest
 
 개발자 관접에서 내부를 테스트
+
+##### Domain = apps in Django
