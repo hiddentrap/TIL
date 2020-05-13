@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="1d890118-b12f-4a7b-9d81-cdcdcad86b06" name="Default Changelist" comment="" />
+=======
+    <list default="true" id="1d890118-b12f-4a7b-9d81-cdcdcad86b06" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../../../Documents/03.Design/ServcieLayerPattern.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Documents/03.Design/ServcieLayerPattern.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Documents/06.Tips/Terminology.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Documents/06.Tips/Terminology.md" afterDir="false" />
+    </list>
+>>>>>>> 0370607e9ada4a9159ae3414cf04eeb3d1abc3b9
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+<<<<<<< HEAD
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="false">
@@ -67,6 +75,8 @@
       </file>
     </leaf>
   </component>
+=======
+>>>>>>> 0370607e9ada4a9159ae3414cf04eeb3d1abc3b9
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -78,13 +88,6 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
   </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/functional_tests.py" />
-      </list>
-    </option>
-  </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="1273" />
     <option name="width" value="1294" />
@@ -92,41 +95,6 @@
   </component>
   <component name="ProjectId" id="1bbJ6BdBbGPrmbeuWNgIVMyYhnE" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
-  <component name="ProjectView">
-    <navigator proportions="" version="1">
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="asset_inventory" type="b2602c69:ProjectViewProjectNode" />
-              <item name="asset_inventory" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="asset_inventory" type="b2602c69:ProjectViewProjectNode" />
-              <item name="asset_inventory" type="462c0819:PsiDirectoryNode" />
-              <item name="asset_inventory" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="asset_inventory" type="b2602c69:ProjectViewProjectNode" />
-              <item name="asset_inventory" type="462c0819:PsiDirectoryNode" />
-              <item name="servers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="asset_inventory" type="b2602c69:ProjectViewProjectNode" />
-              <item name="asset_inventory" type="462c0819:PsiDirectoryNode" />
-              <item name="servers" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope" />
-    </panes>
-  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -146,18 +114,6 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\2012160\Desktop\Study\TIL\Projects\Django\asset_inventory" />
     </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="RunManager" selected="Python tests.Unittests in functional_tests.py">
     <configuration name="asset_inventory" type="Python.DjangoServer" factoryName="Django server">
@@ -280,6 +236,7 @@
   <component name="TimeTrackingManager">
     <option name="totallyTimeSpent" value="6906000" />
   </component>
+<<<<<<< HEAD
   <component name="ToolWindowManager">
     <frame x="1273" y="0" width="1294" height="1407" extended-state="0" />
     <layout>
@@ -313,6 +270,8 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
   </component>
+=======
+>>>>>>> 0370607e9ada4a9159ae3414cf04eeb3d1abc3b9
   <component name="VcsManagerConfiguration">
     <MESSAGE value="first commit" />
     <MESSAGE value="Add app for servers, with deliberately failing unit test" />
@@ -356,6 +315,7 @@
     </state>
     <state x="1109" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1588897738012" />
   </component>
+<<<<<<< HEAD
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/asset_inventory/settings.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -395,4 +355,6 @@
       </provider>
     </entry>
   </component>
+=======
+>>>>>>> 0370607e9ada4a9159ae3414cf04eeb3d1abc3b9
 </project>

@@ -4,7 +4,7 @@
 
 ##### Abstraction = Interface = Port
 
-##### Implementation of Abstraction or Interface = adapter
+##### Implementation of Abstraction or Interface = Adapter
 
 파이썬에는 Interface가 없으므로, 추상화 베이스 클래스(ABC)를 상속받은 클래스를 Port로 간주한다.
 
@@ -27,3 +27,5 @@
 ##### UnitTest
 
 개발자 관접에서 내부를 테스트
+
+##### Domain = apps in Django
