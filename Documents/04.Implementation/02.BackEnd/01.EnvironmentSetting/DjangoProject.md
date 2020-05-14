@@ -1483,21 +1483,31 @@ Apis ->  Services -> Modesl -> DB
 
   Apis 와 Interfaces는 도메인의 context boundary를 나타내며 외부로부터 도메인 내부를 보호한다.
 
-- Services
+  **Presentation Layer**
 
-  Services는 Models와 상호작용하며 도메인의 비지니스 로직을 처리한다. Services가 datastore와 Interface에 커뮤니케이션 하는지 아니면 다른 도메인에 커뮤니케이션 하는지는 Models에 따라 다르다.
+  - APIs
 
-- Models
+    Apis는 다른 도메인에서 service 기능을 사용할 수 있도록 publishing 한다. 이는 Services에 의존적이다.
 
-  Models는 데이터베이스에 있는 데이터는 Models에 저장되며 이는 datastore에 의존적이다
+  - Interfaces
 
-- APIs
+    도메인은 Interfaces를 통해 다른 도메인을 사용할 수 있다. 서비스는 다른 도메인과 통신하기 위해 interfaces에 의존적이다.
 
-  Apis는 다른 도메인에서 service 기능을 사용할 수 있도록 publishing 한다. 이는 Services에 의존적이다.
+  **Service Layer**
 
-- Interfaces
+  - Services
 
-  도메인은 Interfaces를 통해 다른 도메인을 사용할 수 있다. 서비스는 다른 도메인과 통신하기 위해 interfaces에 의존적이다.
+    Services는 Models와 상호작용하며 도메인의 비지니스 로직을 처리한다. Services가 datastore와 Interface에 커뮤니케이션 하는지 아니면 다른 도메인에 커뮤니케이션 하는지는 Models에 따라 다르다.
+
+  **Domain Layer**
+
+  - Models
+
+    Models는 데이터베이스에 있는 데이터는 Models에 저장되며 이는 datastore에 의존적이다
+
+  **External I/O**
+
+  - ORM, Database, 3rd-Paty, File etc
 
 ##### 파일구조
 
@@ -1570,6 +1580,12 @@ Apis ->  Services -> Modesl -> DB
 
   "어디에서 이 데이터를 사용자에게 보여준담?" 또는 "API 스키마를 어디에 정의 한담?"
 
+- **Interface**: Interface.py
+
+  다른 도메인으으로부터의 Input, 으로의 Output 데이터의 변환 처리
+
+  "어디서 다른 도메인으로 붙는담?" 또는 "다른 도메인으로 보낼 데이터 포맷을 어떻게 바꾼담?"
+
 - **Services**: Services.py
 
   절차를 조정하고 트랜잭션 처리를 하는 로직
@@ -1582,19 +1598,282 @@ Apis ->  Services -> Modesl -> DB
 
   "데이터를 어디에 저장한 담?" 또는 "저장하기 전처리 후처리 작업을 어디서 한담?"
 
-- **Interface**: Interface.py
-
-  다른 도메인으으로부터의 Input, 으로의 Output 데이터의 변환 처리
-
-  "어디서 다른 도메인으로 붙는담?" 또는 "다른 도메인으로 보낼 데이터 포맷을 어떻게 바꾼담?"
-
 #### Files
 
 ##### Example 설명
 
-​	두 개의 도메인(books, authors)로 이루어진 서비스, 물론 하나의 도메인에 Books 와 Authors가 존재 할 수 있지만 예제를 위해 두개로 만든다. 그리고 또 하나, book과 author는 1:1 관계로 설정한다.
+​	**두 개의 도메인(books, authors)로 이루어진 서비스**, 물론 하나의 도메인에 Books 와 Authors가 존재 할 수 있지만 예제를 위해 두개로 만든다. 그리고 또 하나, **book과 author는 1:1 관계로 가정**한다.
 
-##### Modesl
+##### Models
+
+​	모델은 데이터 모델 / 데이터베이스 테이블을 정의한다. 이는 Django의 변하지 않는 규약이다. 이 가이드에서의 주요 차이점은 skinny model이라는 점이고 이는 어떤 복잡한 기능 로직도 skinny model에 들어가면 안된다는 점이다.
+
+과거에 Django는 모델에 [active record](https://docs.djangoproject.com/en/2.1/misc/design-philosophies/#models) 스타일을 권장했다. 실제로는 이게 쓰다보니까 개발자로 하여금 너무 많이 그리고 자주 도메인의 표현과 기능 로직을 너무 타이트하게 엮다보니 models.py를 거대하게 하게끔 만든다. 이는 도메인 안에서 데이터의 표현 추상화를 매우 어렵게 만든다. 모든 로직을 한 군데다 몰빵하면 해당 코드 베이스에서 작업하는 개발자 수를 늘리기도 어려워진다.
+
+models.py 
+
+```python
+import uuid
+from django.db import models
+
+
+class Book(models.Model):
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    name = models.CharField(max_length=256)
+    publisher = models.CharField(max_length=256)
+    author_id = models.UUIDField(default=uuid.uuid4)
+
+    @property
+    def name_and_publisher(self):
+        return f'{self.name}, {self.publisher}'
+```
+
+- 모델에는 어떤 복잡한 기능 로직도 있어서는 안된다.
+- 모델에는 관련한 정보성 로직이 있어야 한다.
+- 모델은 상식적인 수준에서 계산을 수행하는 @property (getter)를 가질 수 있다.
+- 모델은 서비스, 인터페이스, APIs를 import하면 안된다.
+- 도메인 경계를 넘나드는 외래키같은 테이블 의존성은 존재해서는 안된다. 대신 UUID 필드를 사용하고 서비스가 모델간의 관계를 제어하도록 해라.
+- 한 도메인 안에서는 테이블간에 외래키를 사용할 수 있다. (근데 이게 나중에 리팩터링을 방해하게 될 거라는건 알고 써라)
+
+##### APIs
+
+​	APIs는 도메인에 대한 외부 API 인터페이스를 정의한다. 정의된 APIs의 사용자를 소비자(consumer)라 부른다. API는 웹상의 소비자를 위해서 [GraphQL](https://github.com/graphql-python) or [REST](https://www.django-rest-framework.org/)을 사용하는 HTTP API가 될 수도 있고, 내부 소비자를 위한 소프트웨어 API가 될 수도 있다. API는 apis.py에 정의되어 있으며 선택한 구현과 무관하며 도메인에 둘 이상의 API를 넣을 수도 있습니다. 예를 들어, 다른 소비자를 위해 GraphQL API와 REST API로 도메을 감쌀 수 있다.
+
+apis.py
+
+```python
+import logging
+import uuid
+from typing import Dict  # noqa
+
+from .services import BookService
+
+logger = logging.getLogger(__name__)
+
+
+class BookAPI:
+
+    @staticmethod
+    def get(*, book_id: uuid.UUID) -> Dict:
+        logger.info('method "get" called')
+        return BookService.get_book(id=book_id)
+```
+
+- APIs는 도메인을 사용하려는 모든 소비자를 위한 진입점으로 사용되야 한다.
+- APIs는 스키마의 선언과 표현 로직을 가져야 한다.
+- 내부 도메인간 APIs는 functions이어야 한다.
+- 상식선에서 구조화를 위해 클래스 안에 내부 API function을 그루핑할 수 있다.
+- 내부 API를 클래스로 묶는다면 네이밍은 DomainAPI로 한다.
+- APIs 함수들은 반드시 타입 어노테이션을 사용한다.
+- APIs 함수들은 반드시 keyword arguments를 사용하도록 한다.
+- APIs 함수들 호출을 로깅해라
+- APIs에서 리턴되는 모든 데이터는 직렬화가능해야 한다.
+- APIs는 데이터를 가져오기 위해 서비스와 커뮤니케이션 해야 한다.
+- APIs는 모델과 직접 커뮤니케이션 해서는 안된다.
+- APIs는 밖으로 나가는 데이터에 대한 변환이라던가 밖에서 들어온 데이터를 도메인이 이해가능하도록 변환하는 등의 간단한 로직만 해야 한다.
+-  API를 통해 표현 된 객체는 데이터의 내부 데이터베이스 표현에 직접 매핑 할 필요가 없습니다.
+
+##### Interfaces
+
+​	도메인이 다른 도메인과 커뮤니케이션할 필요가 있을 수 있다. 그 도메인은 다른 웹서버에 있는 도메인일 수도 있고, 같은 서버에 있는 도메인일 수도 있다. 또는 써드파티 서비스가 될 수 도 있다. 도메인이 다른 도메인과 커뮤니케이션이 필요할때 다른 도메인과의 모든 상호작용을 interfaces.py에 정의한다. 이는 API와 결합하여 도메인의 bounded context를 형성하고 도메인 로직이 유출되는 것을 방지한다.
+
+interfaces.py를 작은 Anti-Corruption Layer로 간주할 수 있다. 인터페이스는 변경없이 단지 API 함수로 파라메터만 넘겨준다. 도메인이 이동할 경우 변화를 수용하기 위해 interfaces.py에 있는 코드만 수정하면 된다. 복잡한 리팩토링이 필요하지 않다.
+
+```python
+import uuid
+from typing import Dict, Str  # noqa
+
+# Could be an internal domain or an HTTP API client - we don't care!
+from src.authors.apis import AuthorAPI
+
+
+# plain example
+def update_author_name(*, author_name: Str, author_id: uuid.UUID) -> None:
+    AuthorAPI.update_author_name(
+        id=author_id,
+        name=author_name,
+    )
+
+
+# class example
+class AuthorInterface:
+
+    @staticmethod
+    def get_author(*, id: uuid.UUID) -> Dict:
+        return AuthorAPI.get(id=id)
+
+    @staticmethod
+    def update_author_name(
+      *,
+      author_name: Str,
+      author_id: uuid.UUID,
+    ) -> None:
+        AuthorAPI.update_author_name(
+            id=author_id,
+            name=author_name,
+        )
+```
+
+- 인터페이스의 주요 컴포넌트는 functions다
+- 구조화를 위해 class로 묶을 수 있다.
+- 클래스를 사용한다면 네이밍 컨벤션은 DomainInterface로 한다.
+- 인터페이스 내부의 functions은 타입 어노테이션을 사용한다.
+- 인터페이스 내부의 functions는 keyworkd arguments를 사용한다.
+
+##### Services
+
+​	도메인의 모든것은 서비스로 모인다.
+
+서비스는 도메인의 모든 비지니스 value를 모은다. 서비스에 포함되야 하는 로직
+
+- 모델의 새 인스턴스를 만들었을 때, 저장하기전에 모델의 필드를 계산할 필요가 있다.
+- 일부 컨텐츠를 쿼리 할 때 다른 위치에서 컨텐츠를 수집하고 파이썬 객체로 합칠 필요가 있다.
+- 인스턴스를 삭제할때 다른 도메인으로 신호를 보내서 다른 도메인에서도 관련 로직을 수행할 수 있게해야 할 필요가 있다.
+
+기본적인 정보성 로직이 아닌 어떤 도메인과 관련된 세세한 로직이라도 서비스에 있어야 한다. 대부분의 API 프로젝트는 CRUD와 같은 단일 기능 작업을 노출하므로 서비스는 stateless, 단일 함수를 보완하기 위해 특별히 설계된다.
+
+services.py
+
+```python
+import logging
+import uuid
+from typing import Dict, Str  # noqa
+
+from .interfaces import AuthorInterface
+from .models import Book
+
+logger = logging.getLogger(__name__)
+
+
+# Plain example
+def get_book(*, id: uuid.UUID) -> Dict:
+    book = Book.objects.get(id=id)
+    author = AuthorInterface.get_author(id=book.author_id)
+    return {
+        'name': book.name,
+        'author_name': author.name,
+    }
+
+
+# Class example
+class PGMNodeService:
+
+    @staticmethod
+    def get_book(*, id: uuid.UUID) -> Dict:
+        book = Book.objects.get(id=id)
+        author = AuthorInterface.get_author(id=book.author_id)
+        return {
+            'name': book.name,
+            'author_name': author.name,
+        }
+
+    @staticmethod
+    def create_book(*, name: Str, author_id: uuid.UUID) -> Dict:
+        logger.info('Creating new book')
+        new_book = Book.objects.create(name=name, author_id=author_id)
+        author = AuthorInterface.get_author(id=new_book.author_id)
+        return {
+            'name': new_book.name,
+            'author_name': author.name,
+        }
+
+    @staticmethod
+    def update_book_name_and_author_name(
+        *,
+        name: Str,
+        author_name: Str,
+        author_id: uuid.UUID,
+        id: uuid.UUID,
+    ) -> Dict:
+        logger.info('Updating book name and author name')
+        book = Book.objects.get(id=id).update(name=name)
+        author = AuthorInterface.update_author_name(
+            name=author_name, id=author_id,
+        )
+        return {
+            'name': book.name,
+            'author_name': author.name,
+        }
+```
+
+- 서비스의 주요 컴포넌트는 functions
+- 서비스에는 조정 및 트랜잭션 로직이 있어야 함
+- 조직화하기 위해 클래스 사용가능
+- 네이밍 컨벤션은 DomainService
+- 타입 어노테이션 사용해야함
+- keyworkd arguments사용해야 함
+- 로깅해야 함
+
+#### Example
+
+##### 두 도메인
+
+- 도메인 2개로 이루어진 프로젝트
+- 두 도메인 모두 APIs를 프론트엔드 서비스로 노출하며 서로 커뮤니케이션한다.
+- 프론트엔드 서비스와 커뮤니케이션은 단순하다 : 두 도메인은 API Layer에 REST API를 정의한고 Frontend 에서 호출한다.
+- 두 도메인이 서로 커뮤니케이션 할 때는 두 도메인 모두 interface를 통해서 한다.
+- 도메인 B 소유자가 도메인 B를 다른 웹서버로 옮기기로 결정했다고 가정해보자.
+- 그러려면 도메인 B를 복사하고 데이터를 마이그레이션 한다.
+- 그 동안 도메인 A는 old 도메인 B와 커뮤니케이션 하고 있을 거고, 도메인 B의 준비가 끝나면 도메인 A는 interface만 새로운 도메인 B로 바라보도록 수정하면. 끝난다.
+
+#### Plugins
+
+​	이 가이드와 함께 사용하면 좋은 플러그인
+
+##### Django Rest Framework
+
+​	[Django REST Framework](https://www.django-rest-framework.org/) Django 용 REST API 서비스 프레임워크
+
+DFR를 사용할때 도메인 안에 로직은 다음과 같이 정리한다.
+
+- urls.py : 라우터와 RUL 설정
+- apis.py : DRF view function 또는 클래스
+- serializers.py - 모델 직렬화
+
+DRF사용시 규칙
+
+- DFR 직렬화를 사용해서 모든 모델을 직렬화해라
+-  [ModelMixin](https://www.django-rest-framework.org/api-guide/generic-views/#mixins) Viewsets은 데이터 레이어와 프레젠테이션 레이어를 타이트하게 결합시키므로 사용하지 말 것
+
+##### Graphene Django
+
+​	[Graphene-Django](https://docs.graphene-python.org/projects/django/en/latest/)는 Djagon용 [GraphQL](https://graphql.org/) API 생성 프레임워크
+
+- apis.py : Queries and Mutations
+- DjangoObjectType 대신 ObjetType을 사용할 것
+
+#### Test
+
+Any file that handles `interfaces.py` should **mock out other dependent domains** but you should still be testing your **own interface definitions**.
+
+You should use Python's [standard `patch` tool for this](https://docs.python.org/3.5/library/unittest.mock.html#unittest.mock.patch).
+
+You **can** use [`MagicMock`](https://docs.python.org/3.5/library/unittest.mock.html#unittest.mock.MagicMock) where it makes sense.
+
+```python
+# book/test_services.py
+from unittest.mock import patch
+
+from src.book.services import create_book
+
+
+@patch('src.book.interfaces.AuthorInterface.get_author')
+def test_service_calls_author_interface(mocked_function_call):
+    # Set up patched domain calls if you need it
+    mocked_function_call.return_value = {
+        'returned': 'object',
+    }
+    # The actual test
+    result = create_book(
+        name='A Wizard of Earthsea',
+        author_id='d29eee0b-5b60-46d8-8c42-a8da9ddabbb6',
+    )
+    # Assert patched domain called with expected values
+    assert mocked_function_call.assert_called_with(
+      id='d29eee0b-5b60-46d8-8c42-a8da9ddabbb6',
+    )
+```
 
 ## Project Start
 

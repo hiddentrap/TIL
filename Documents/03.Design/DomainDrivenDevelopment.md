@@ -4,6 +4,8 @@
 
 [참고필요](https://private-space.tistory.com/tag/DDD)
 
+[참고필요2](https://12bme.tistory.com/522)
+
 ### 4가지 영역
 
 #### 표현 Layer (Controller), 최상위 계층

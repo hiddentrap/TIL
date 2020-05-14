@@ -4,6 +4,12 @@
 
 [지옥에서 온 Git](https://opentutorials.org/course/2708/15606)
 
+### 용어
+
+**Stage**: commit 대상
+
+**unstaged file**: staging 안 된 파일들로 수정되었어도 staging되지 않기 때문에 commit 대상이 아니다. git status 쳐보면 빨간 글씨로 나온다.
+
 ## 시나리오별 사용법
 
 ### 원격 저장소(Repository) 에서 기존 프로젝트 시작
@@ -103,3 +109,38 @@ $ git branch -a
 $ git branch --delete bn
 ```
 
+### CheckOut 실패하는 경우 (Branch 이동 실패)
+
+```
+$ git reset 또는 git stash
+```
+
+​	주로 수정된 unstaged file이 존재할 때 checkout을 시도하면 나타나는 경우다.
+
+이런경우 unstaged file을 add 시켜 stage에 올리고 commit한 뒤 checkout하면 되는데, 변경을 commit하지 않은체 checkout을 하고싶은 경우 두가지 방법이 있다.
+
+기존 수정 내용을 다 날리고 브랜치를 바꾸고 싶은 경우 reset이용
+
+reset: svn에서 revert와 같은 개념으로 변경 내용을 모두 되돌린다.
+
+잘못된 브랜치에서 작업을 한 경우, 브랜치를 변경하고 수정 내용을 변경한 브랜치에서 불러오고 싶은 경우, stash 이용
+
+stash: 변경된 내용과 마지막 커밋 정보를 임시 stack에 저장하고 working tree를 clean 시키므로 checkout이 가능하게 된다. 
+
+브랜치를 변경한 후에는
+
+```
+# git stash pop
+```
+
+으로 원래 작업하던 내용을 불러올 수 있다.
+
+list : stash stack 내용 보기
+
+show : stash 상세보기
+
+pop : stash 꺼내기
+
+drop : stash 날리기
+
+clear : stash 스택 비우기
