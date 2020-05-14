@@ -29,3 +29,23 @@
 개발자 관접에서 내부를 테스트
 
 ##### Domain = apps in Django
+
+##### Consumer, Consume
+
+소비자, 소비하다 = 사용자, 사용하다. 단, 사용자는 사람을 지칭할 수 있기에 소비자를 사용한다. 소비자는 사람, 서비스, APIs 무엇이든지 될 수 있다.
+
+Language 
+
+OOP(Object Oriented Programming): Single Responsible Pattern, Open Closed Pattern, Liskove... , Interface Serregatin Pattern, Dependency Inversion Pattern and other Design Patternj
+
+TDD(BDD) : Test Driven Development(Behavial Driven Development)
+
+MVC Pattern, MVT Pattern, Rest API, GraphQL
+
+AOP : Aspect Oriented Programming
+
+DDD : Domain Driven Development - Domain Model, APIs, Interface, Service, External I/O, ValueObject, Aggregate, Entity
+
+EDA : Event Driven Architecture - Domain Events and MessageBus
+
+MSA : Micro Service Architecutre 

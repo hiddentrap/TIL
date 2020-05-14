@@ -63,6 +63,10 @@ loginUserAndGetGroups() 이런 함수가 나오면 안된다. 두 개로 쪼갤 
 
 대신에, 3개 함수를 각각 호출하는 코드를 감싸는 함수 getUserMedia()를 만들어 사용하자.
 
+함수가 then 또는 and 없이 어떤일을 하는지 기술할 수 없다면 SRP를 위반했을 가능성이 크다.
+
+ex: aloocate_and_send_mail_if_out_of_stock()
+
 ### OCP
 
 ​	확장에는 열려있고 수정에는 닫혀있어야 한다.
