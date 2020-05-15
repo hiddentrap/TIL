@@ -48,4 +48,14 @@ DDD : Domain Driven Development - Domain Model, APIs, Interface, Service, Extern
 
 EDA : Event Driven Architecture - Domain Events and MessageBus
 
+SOA : Service Oriented Architeture
+
 MSA : Micro Service Architecutre 
+
+##### Immutable Object = 불변객체
+
+생성한뒤에 상태(속성) 값을 변경할 수 없는 객체
+
+##### CORS (Cross-Origin Resource Sharing)
+
+웹브라우저는 특정사이트에 접속중인 상태에서 다른 사이트를 접근하는 경우 Same Origin Policy위반 이라고 판단하기 때문에(XSS 방지목적) FronteEnd에서 BackEnd접속시 BackEnd단에서 CORS 설정이 필요하다.

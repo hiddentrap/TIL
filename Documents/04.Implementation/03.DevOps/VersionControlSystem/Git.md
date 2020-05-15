@@ -10,6 +10,23 @@
 
 **unstaged file**: staging 안 된 파일들로 수정되었어도 staging되지 않기 때문에 commit 대상이 아니다. git status 쳐보면 빨간 글씨로 나온다.
 
+## Commit Message 작성법
+
+- 제목과 본문은 한 줄 띄워 적는다
+- 제목은 50자로 제한한다.
+- 제목은 대문자로 작성한다.
+- 제목은 마침표를 사용하여 끝내지 않는다.
+- 제목은 명령조를 사용한다.
+  - Add : 기능 혹은 코드 추가
+  - Fix : 기존 코드 버그 수정 및 기능 수정
+  - Rename : 파일 이름 및 명시된 이름 변경
+  - Remove : 코드 삭제
+  - Delete : 파일 삭제
+  - Refactore : 코드 전면 수정
+  - Move : 파일 이동
+- 본문은 72자를 넘어가면 줄바꿈을 해준다.
+- 본문에는 how가 아닌 what/why를 적는다.
+
 ## 시나리오별 사용법
 
 ### 원격 저장소(Repository) 에서 기존 프로젝트 시작
@@ -142,3 +159,4 @@ pop : stash 꺼내기
 drop : stash 날리기
 
 clear : stash 스택 비우기
+
