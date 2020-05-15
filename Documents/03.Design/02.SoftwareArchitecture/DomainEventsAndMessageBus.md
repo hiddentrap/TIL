@@ -1,5 +1,7 @@
 # Domain Events and Message Bus pattern
 
+Message Bus = Message Broker (Message Oriented Middleware)= Message Que = publish and subscriber (RabbitMQ, Apache kafka, Redis, IBM WebSphere MQ ...)
+
 publishes event to -> Message Bus -> dispaches events to -> Handler functions()
 
 ## 배경
