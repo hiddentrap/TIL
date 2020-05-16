@@ -28,15 +28,32 @@
 
 2. Functional Test가 실패하면, 성공시키기 위해 작성해야할 코드를 생각해보고 그 코드의 동작을 정의하기 위한 unit test들을 작성
 
+   ```
+   python manage.py runserver
+   python functional_tests.psy
+   ```
+
 3. unit test가 실패하면, 성공시키기 위해 가능한한 적은 양의 어플리케이션 코드를 작성한다. Functional Test가 성공할 때까지, 2번과 3번을 반복한다.
 
    ```
    python manage.py test
    ```
 
-   FunctionalTest는 **사용자 행위를 기술**하듯 작성한다.
+4. unit test나 functional test가 성공하면 리팩터링이 필요한지 생각해보고 필요하다면 리팩터링 한다.
 
-   Unit Test는 **Given-When-Then 패턴**으로 작성한다
+FunctionalTest는 **사용자 행위를 기술**하듯 작성한다.
+
+Unit Test는 **Given-When-Then 패턴**으로 작성한다
+
+
+
+##### 레드/그린/리팩터와 삼각법
+
+단위 테스트-코드 주기를 레드, 그린, 리팩터로 설명하는 경우
+
+- 실패할 단위 테스트를 작성함으로써 작업을 시작한다(레드)
+- 이 테스트를 통과할 최소 코드를 작성한다(그린), 편법이라도 상관없다.
+- 코드를 리팩터링해서 이해할 수 있는 코드로 만든다.
 
 ## Given-When-Then Pattern For Test writing
 

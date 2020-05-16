@@ -6,5 +6,13 @@
 </head>
 <body>
     <h1>서버관리</h1>
+    <form method = "POST">
+        <input name = "item_text" id="id_new_item" placeholder="서버명"/>
+        {% csrf_token %}
+    </form>
+
+    <table id = 'id_list_table'>
+        <tr><td>1: {{ new_item_text }}</td></tr>
+    </table>
 </body>
 </html>

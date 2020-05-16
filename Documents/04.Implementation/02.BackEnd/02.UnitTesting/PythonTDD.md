@@ -49,6 +49,22 @@ driver = webdriver.Chrome(ChromeDriverManager().install())
         self.assertTrue(html.strip().endswith('</html>'))
 ```
 
+```python
+ def test_home_page_can_save_a_POST_request(self):
+        # Given
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST['item_text'] = 'SERVER01'
+
+        # When
+        response = home_page(request)
+
+        # Then
+        self.assertIn('SERVER01', response.content.decode())
+        expected_html = render_to_string('servers.html', {'new_item_text': 'SERVER01'})
+        self.assertEqual(expected_html, response.content.decode())
+```
+
 ### Django way
 
 ```python
