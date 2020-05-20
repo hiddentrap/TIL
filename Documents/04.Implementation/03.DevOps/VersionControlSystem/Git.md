@@ -92,6 +92,17 @@ $ git diff
 $ git commit -am 'third commit'
 ```
 
+### 변경 내용 추가하고 커밋하고 부쉬까지
+
+```
+$ git status
+$ git add -A
+$ git commit -m "message"
+$ git push origin master
+```
+
+git add -A 새파일 추가 및 삭제를 비롯해서 모든 변경내용을 적용
+
 ### 커밋 히스토리 확인
 
 ```
@@ -117,8 +128,6 @@ $ git branch -r
 ```
 $ git branch -a
 ```
-
-#### 로컬 + 
 
 ### 잘못 생성된 브랜치 삭제
 
@@ -161,4 +170,19 @@ pop : stash 꺼내기
 drop : stash 날리기
 
 clear : stash 스택 비우기
+
+### Commit Message 수정
+
+#### Push 안한 commit
+
+```
+$ git commit --amend -m "New commit message"
+```
+
+#### Push 한 commit
+
+```
+$ git commit --ammend -m "New commit message"
+$ git push --force branch-name
+```
 
