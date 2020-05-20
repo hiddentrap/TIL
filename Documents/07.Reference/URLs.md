@@ -27,3 +27,10 @@
 ## Reading
 
 https://blog.naver.com/ksggola/221802988202
+
+[분산트랜잭션](https://developer.ibm.com/kr/developer-기술-포럼/2017/08/14/분산-트랜잭션-없이-사용하기/)
+
+[SQL튜닝](http://www.itworld.co.kr/news/105792?page=0,0)
+
+[영어서적](https://leanpub.com/bookstore/book?page=3&search=python)
+
