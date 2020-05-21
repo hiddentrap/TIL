@@ -1289,7 +1289,9 @@ git log --oneline
 
 ### APP에 새로운 기능 추가
 
-#### 3rd-party App 추가
+#### 치즈 원산지 표기
+
+##### 3rd-party App 추가
 
 - Cheese model에 country field 추가
 
@@ -1340,7 +1342,7 @@ THIRD_PARTY_APPS = [
 ]
 ```
 
-#### Model 수정
+##### Model 수정
 
 `cheeses/models.py`
 
@@ -1371,7 +1373,7 @@ Colby - 미국
 
 
 
-#### 템플릿 수정
+##### 템플릿 수정
 
 `templates/cheeses/cheese_detail.html`
 
@@ -1381,6 +1383,731 @@ Colby - 미국
   <img src="{{ cheese.country_of_origin.flag }}"/>
 </p>
 {% endif %}
+```
+
+
+
+**커버리지확인**
+
+```python
+coverage run -m pytest
+```
+
+
+
+##### Dummy 생성기 수정
+
+`factories.py`
+
+```
+country_of_origin = factory.Faker('country_code')
+```
+
+동작확인
+
+```python
+from everycheese.cheeses.tests.factories import CheeseFactory
+for i in range(5):
+	cheese = CheeseFactory()
+```
+
+생성된 데이터는 admin에서 삭제한다.
+
+**Commit**
+
+```python
+git status
+git add -A
+git commit -m "Add cheese country of origin"
+git push origin master
+git log --oneline
+```
+
+
+
+#### 치즈만들기 by 사용자
+
+##### 치즈생성 View 추가
+
+`cheeses/views.py`: 치즈관련 view
+
+```python
+from django.views.generic import CreateView:
+
+class CheeseCreateView(CreateView):
+	model = Cheese
+    fields = ['name', 'description', 'firmness', 'country_of_origin']
+```
+
+##### URL - View 매핑
+
+`cheeses/urls.py`
+
+```python
+    path(
+        route='add/',
+        view=views.CheeseCreateView.as_view(),
+        name='add'
+    ),
+```
+
+detail보다 먼저 위치하게 한다.
+
+
+
+##### 템플릿 추가
+
+`templates/cheeses/cheese_form.html`
+
+```html
+{% extends "base.html" %}
+
+{% block title %}Add Cheese{% endblock %}
+
+{% block content %}
+<h1>Add Cheese</h1>
+<form method="post" action="{% url 'cheeses:add' %}">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-primary">Save</button>
+</form>
+{% endblock %}
+```
+
+테스트
+
+```
+Name: Havarti
+Description: A mild, buttery cheese that comes in loaves or blocks.
+Firmness: Semi-Soft
+Country of Origin: Denmark
+```
+
+##### Model 수정
+
+`cheeses/models.py`
+
+```python
+from django.urls import reverse
+
+    def get_absolute_url(self):
+        """Return absolute URL to the Cheese Detail page."""
+        return reverse('cheeses:detail',
+                       kwargs={"slug": self.slug})
+```
+
+##### 메뉴연결
+
+`templates/cheeses/cheese_list.hml`
+
+```html
+{% extends "base.html" %}
+{% block title %}Cheese List{% endblock title %}
+{% block content %}
+  <h2>Cheese List</h2>
+
+<ul>
+  {% for cheese in cheese_list %}
+    <li><a href="{% url 'cheeses:detail' cheese.slug %}">{{ cheese.name }}</a></li>
+  {% endfor %}
+</ul>
+<hr/>
+  <p>Don' t see a cheese listed here?</p>
+  <p>
+    <a class="btn btn-primary" href="{% url ' cheeses: add' %}" role="button">
+    Add Cheese
+    </a>
+</p>
+{% endblock content %}
+```
+
+**Commit**
+
+```
+git status
+git add -A
+git commit -m "Add Cheese form"
+git push origin master
+git log --oneline
+```
+
+##### Crispy Form 적용
+
+Django 내장 Form 디스플레이 메소드 as_p(), as_table(), as_ul()을 사용할지라도 form을 Bootstraps form 스타일로 포매팅할 수 있는 방법이 없다.
+
+대안은, django-crispy-forms 패키지로 이미 django-crash-starter에 설치되어 users app에 사용되고 있다.
+
+`templates/cheeses/cheese_form.html`
+
+```html
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Add Cheese{% endblock %}
+
+{% block content %}
+<h1>Add Cheese</h1>
+<form method="post" action="{% url 'cheeses:add' %}">
+  {% csrf_token %}
+  {{ form|crispy }}
+  <button type="submit" class="btn btn-primary">Save</button>
+</form>
+{% endblock %}
+
+```
+
+**Commit**
+
+```
+git status
+git add -A
+git commit -m "Add django-crispy-forms for better add Cheese form display"
+git push origin master
+git log --oneline
+```
+
+
+
+#### 사용자 제한
+
+치즈정보 등록화면을 로그인된 사용자에게만 접근허용한다.: LoginRequiredMixin 상속
+
+##### View 수정
+
+`cheeses/views.py`
+
+```python
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+class CheeseCreateView(LoginRequiredMixin, CreateView):
+```
+
+**Commit**
+
+```
+git status
+git add -A
+git commit -m "Add Constratin Add Cheese form to loggend-in users only"
+git push origin master
+git log --oneline
+```
+
+
+
+#### 치즈정보 생성자 필드 추가
+
+##### 모델 수정: 필드 추가
+
+`cheeses/models.py`
+
+```python
+from django.conf import settings
+
+create = models.ForeignKey(
+    settings.AUTH_USER_MODEL,
+    null=True,
+    on_delete=models.SET_NULL
+)
+```
+
+`create`필드는 `User`객체에 대한 `ForeignKey`이다. `User`삭제시 Null로 설정되며, 다른 전략으로는 `User`삭제시 `Cheese`도 함께 삭제되거나, 다른 `default User`가 설정되게 한다.
+
+[Django Docks](http://bit.ly/django-db-models-ForeignKey)
+
+**DB에 반영**
+
+```
+python manage.py makemigrations cheeses
+pythohn manage.py migrate
+```
+
+**기존 데이터에 creator 일괄주입**
+
+```
+python manage.py shell_plus
+cheesehead = User.objects.get(username='cheesehead')
+for cheese in Cheese.objects.all():
+	cheese.create = cheesehead
+	cheese.save()
+
+for cheese in Cheese.objects.all():
+	print(cheese, cheese.creator)
+```
+
+**Commit**
+
+```
+git status
+git add -A
+git commit -m "Add creator field to Cheese model and custom migration"
+git push origin master
+git log --oneline
+```
+
+##### 치즈생성 View 수정
+
+`CreateView의 form_valid()`메서드를 오버라이드해서 생성자를 등록하도록한다.
+
+`cheeses/views.py`
+
+```python
+class CheeseCreateView(LoginRequiredMixin, CreateView):
+    model = Cheese
+    fields = ['name', 'description', 'firmness', 'country_of_origin']
+    
+    def form_valid(self, form):
+        form.instance.creator = self.request.user
+        return super().form_valid(form)
+```
+
+##### 치즈상세정보 템플릿 수정
+
+생성자 보이도록 수정
+
+`templates/cheeses/cheese_detail.html`
+
+```html
+<hr/>
+
+<h3>Submitted by
+  <a href="{% url 'users:detail' cheese.creator.username %}">
+  {{ cheese.creator.username }}
+  </a>
+</h3>
+{% if cheese.creator.name %}
+  <p>{{ cheese.creator.name }}</p>
+{% endif %}
+```
+
+**Commit**
+
+```
+git status
+git add -A
+git commit -m "Add Track and Display the creator of each cheese"
+git push origin master
+git log --oneline
+```
+
+##### **Dummy생성기 수정**
+
+`cheeses/tests/factories.py`
+
+```python
+from everycheese.users.tests.factories import UserFactory
+
+creator = factory.SubFactory(UserFactory)
+```
+
+**커버리지테스트 수행**
+
+```
+coverage run -m pytest
+```
+
+**Commit**
+
+```
+git commit -m "Add a cheese creator user to cheese factory"
+```
+
+##### 모델 테스트 수정
+
+아직 테스트 되지 않은 `Get_absolute_url()`에 대한 테스트 추가
+
+`cheeses/tests/test_models.py`
+
+```python
+def test_get_absolute_url():
+    # Given
+    cheese = CheeseFactory()
+
+    # When
+    url = cheese.get_absolute_url()
+    
+    # Then
+    assert url == f'/cheeses/{cheese.slug}/'
+```
+
+**Commit**
+
+```
+git commit -m "Add test for get_absolute_url() method"
+```
+
+### View Test
+
+모델에 메서드가 추가될때마다 테스트를 작성해야 한다. 또한 View난 URL pattern도 테스트 하는게 바람직하다.
+
+View Test 는 End to End 테스트 즉, UseCase 테스트 이므로 스토리처럼 서술하듯 주석을 단다.
+
+#### 준비
+
+`cheeses/tests/test_views.py`생성
+
+```python
+import pytest
+from pytest_django.asserts import assertContains, assertRedirects
+
+from django.urls import reverse
+from django.contrib.sessions.middleware import SessionMiddleware
+from django.test import RequestFactory
+
+from everycheese.users.models import User
+from ..models import Cheese
+from ..views import (
+    CheeseCreateView,
+    CheeseListView,
+    CheeseDetailView
+)
+from .factories import CheeseFactory
+
+pytestmark = pytest.mark.django_db
+
+```
+
+#### Cheese List 테스트
+
+```python
+def test_good_cheese_list_view_expanded(rf):
+    # 사용자는 URL을 입력한다.
+    url = reverse("cheeses:list")
+    # rf = pytest의 django.test.RequestFactory의 레퍼런스
+    # 사용자가 입력한 것처럼 리퀘스트를 만들어낸다.
+    request = rf.get(url)
+    # function-based view와 유사한 호출 view생성
+    callable_obj = CheeseListView.as_view()
+
+    # View에 리퀘스트를 전달하여 HTTP Response를 응답받는다.
+    response = callable_obj(request)
+
+    # HTTP 응답에 'Cheese List'가 있는지 확인한다.
+    assertContains(response, 'Cheese List')
+
+
+def test_cheese_list_contains_2_cheeses(rf):
+    # Given
+    cheese1 = CheeseFactory()
+    cheese2 = CheeseFactory()
+    request = rf.get(reverse("cheeses:list"))
+    # When
+    response = CheeseListView.as_view()(request)
+    # Then
+    assertContains(response, cheese1.name)
+    assertContains(response, cheese2.name)
+```
+
+#### Cheese Detail 테스트
+
+```python
+def test_good_cheese_detail_view(rf):
+    # 치즈 팩토리에 치즈를 주문한다.
+    cheese = CheeseFactory()
+    # 치즈 정보에 대한 요청을 만든다.
+    url = reverse("cheeses:detail", kwargs={'slug': cheese.slug})
+    request = rf.get(url)
+    # 치즈 정보를 요청한다.
+    callable_obj = CheeseDetailView.as_view()
+    response = callable_obj(request, slug=cheese.slug)
+    # 제대로된 이름이 들어있는지를 확인한다.
+    assertContains(response, cheese.name)
+
+
+def test_detail_contains_cheese_data(rf):
+    # Given
+    cheese = CheeseFactory()
+    request = rf.get(reverse("cheeses:detail", kwargs={'slug': cheese.slug}))
+    # When
+    response = CheeseDetailView.as_view()(request, slug=cheese.slug)
+    # Then
+    assertContains(response, cheese.name)
+    assertContains(response, cheese.get_firmness_display())
+    assertContains(response, cheese.country_of_origin.name)
+
+```
+
+#### Cheese Create 테스트
+
+로그인사용자 제한 때문에 리퀘스트에 인가사용자 정보를 만들어준다.
+
+```python
+def test_good_cheese_create_view(rf, admin_user):
+    # 치즈를 주문한다.
+    cheese = CheeseFactory()
+    # 새 치즈에 대한 요청을 만든다.
+    request = rf.get(reverse("cheeses:add"))
+    # 사용자 인증 정보를 추가한다.
+    request.user = admin_user
+    # 요청을 보낸다
+    response = CheeseCreateView.as_view()(request)
+    # 응답 상태코드를 확인한다.
+    assert response.status_code == 200
+    
+    
+def test_cheese_create_form_valid(rf, admin_user):
+    # Given
+    form_data = {
+        "name": "Paski Sir",
+        "description": "A salty hard cheese",
+        "firmness": Cheese.Firmness.HARD
+    }
+    request = rf.post(reverse("cheeses:add"), form_data)
+    request.user = admin_user
+    # When
+    response = CheeseCreateView.as_view()(request)
+    cheese = Cheese.objects.get(name="Paski Sir")
+    # Then
+    assert cheese.description == "A salty hard cheese"
+    assert cheese.firmness == Cheese.Firmness.HARD
+    assert cheese.creator == admin_user
+```
+
+```
+git commit -m "Add tests for all cheese views"
+```
+
+### URL 패턴 테스트
+
+#### 준비
+
+`cheeses/tests/test_urls.py`생성
+
+```python
+import pytest
+from django.urls import reverse, resolve
+
+from .factories import CheeseFactory
+
+pytestmark = pytest.mark.django_db
+```
+
+#### Fixture 작성
+
+테스트 하는 동안 치즈객체를 몇번 생성해야 하는데 `cheese = CheeseFactory()`를 테스트마다 매번 기술하는 것보다 fixture를 만들면 편하다.
+
+```
+@pytest.fixture
+def cheese():
+	return CheeseFactory()
+```
+
+#### Cheese List URL 패턴 테스트
+
+URL 패턴 테스트는 앞으로, 뒤로 모두 테스트하는 게 좋다.
+
+- Reverse는 View 이름으로부터 URL을 구해온다.
+- Resolve는 URL로부터 View 이름을 가져온다.
+
+```python
+def test_list_reverse():
+    """cheeses:list should reverse to /cheeses/"""
+    assert reverse('cheeses:list') == '/cheeses/'
+
+
+def test_list_resolve():
+    """/cheeses/ should resolve to cheeses:list"""
+    assert resolve('/cheeses/').view_name == 'cheeses:list'
+```
+
+#### Cheese Create URL 테스트
+
+```python
+def test_add_reverse():
+    """cheeses:add should reverse to /cheeses/add/"""
+    assert reverse('cheeses:add') == '/cheeses/add/'
+
+
+def test_add_resolve():
+    """/cheeses/add/ should resolve to cheeses:add"""
+    assert resolve('/cheeses/add/').view_name == 'cheeses:add'
+```
+
+#### Cheese Detail URL 테스트
+
+```python
+def test_detail_reverse(cheese):
+    """cheeses:detail should reverse to /cheeses/cheeseslug/"""
+    url = reverse('cheeses:detail',
+                  kwargs={'slug': cheese.slug})
+    assert url == f'/cheeses/{cheese.slug}/'
+
+
+def test_detail_resolve(cheese):
+    """/cheeses/cheeseslug/ should resolve to cheeses:detail"""
+    url = f'/cheeses/{cheese.slug}/'
+    assert resolve(url).view_name == 'cheeses:detail'
+```
+
+```
+git commit -m "Add tests for all cheese URL patterns"
+```
+
+### CheeseUpdate 기능추가
+
+#### 치즈정보수정 View추가
+
+`cheeses/views.py`
+
+```python
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
+
+class CheeseUpdateview(LoginRequiredMixin, UpdateView):
+    model = Cheese
+    fields = ['name', 'description', 'firmness', 'country_of_origin']
+    action = "Update"
+```
+
+#### URL 패턴 추가
+
+`cheeses/urls.py`
+
+```python
+    path(
+        route='<slug:slug>/update/',
+        view=views.CheeseUpdateView.as_view(),
+        name='update'
+    ),
+```
+
+#### 템플릿 수정
+
+기본적으로 `CheeseCreateView`와 `CheeseUpdateView`는 `cheese_form.html`템플릿을 공유한다.
+
+문제는 현재 `cheese_form.html는` 항상 사용자에게 `CheeseUpdateView에서` 요청하는것과 관계없이 `CheeseCreateView를` 보내고 있다
+
+따라서, `CheeseCreateView` 와 `CheeseUpdateView를` 모두 처리할 수 있도록 수정이 필요하다.
+
+`templates/cheeses/cheese_form.html`
+
+수정전
+
+```html
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Add Cheese{% endblock title %}
+
+{% block content %}
+<h1>Add Cheese</h1>
+<form method="post" action="{% url 'cheeses:add' %}">
+  {% csrf_token %}
+  {{ form|crispy }}
+  <button type="submit" class="btn btn-primary">Save</button>
+</form>
+{% endblock %}
+
+```
+
+수정후
+
+```python
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ view.action|default:"Add" }} Cheese{% endblock title %}
+
+{% block content %}
+{% with action=view.action|default:"Add" %}
+<h1>{{ action }} Cheese</h1>
+<form method="post" action=".">
+  {% csrf_token %}
+  {{ form|crispy }}
+  <button type="submit" class="btn btn-primary">{{ action }}</button>
+</form>
+{% endwith %}
+{% endblock %}
+
+```
+
+- 타이틀 블럭 수정
+- with Tag는 block Tag를 가로지를 수 없다.
+- action = "." 으로 수정 등
+
+#### 메뉴연결
+
+`templates/cheeses/cheese_detail.html`
+
+```html
+<p>
+  <a class="btn btn-primary"
+     href="{% url 'cheeses:update' cheese.slug %}"
+     role="button">
+    Update
+  </a>
+</p>
+```
+
+```
+git commit -m "Add cheese update view, modify template"
+```
+
+#### 테스트 작성
+
+##### Cheese Fixture 확장
+
+`cheeses/tests/factories.py`에 추가
+
+```python
+import pytest
+
+@pytest.fixutre
+def cheese():
+	return CheeseFactory()
+```
+
+##### View 테스트 작성
+
+`cheeses/tests/test_views.py`
+
+```python
+from .factories import CheeseFactory, cheese
+from ..views import (
+    CheeseCreateView,
+    CheeseListView,
+    CheeseDetailView,
+    CheeseUpdateView
+)
+
+def test_good_cheese_detail_view(rf, cheese):
+    
+def test_good_cheese_update_view(rf, admin_user, cheese):
+    url = reverse("cheeses:update",
+                  kwargs={'slug': cheese.slug})
+    # 요청만들기
+    request = rf.get(url)
+    # 인증정보 생성
+    request.user = admin_user
+    # 요청
+    callable_obj = CheeseUpdateView.as_view()
+    response = callable_obj(request, slug = cheese.slug)
+    # 응답 테스트
+    assertContains(response, "Update Cheese")
+    
+
+def test_cheese_update(rf, admin_user, cheese):
+    """CheeseUpdateView로 POST 요청을 보내서 cheese를 수정하고
+     리다이렉션 시킨다."""
+    # Given
+    form_data = {
+        'name': cheese.name,
+        'description': 'Something new',
+        'firmness': cheese.firmness
+    }
+    request = rf.post(reverse("cheeses:update",
+                              kwargs={'slug': cheese.slug}),
+                      form_data)
+    request.user = admin_user
+
+    # When
+    response = CheeseUpdateView.as_view()(request, slug=cheese.slug)
+
+    # Then
+    cheese.refresh_from_db()
+    assert cheese.description == 'Something new'
+```
+
+```
+git commit -m "Add Test the cheese forms and update view"
 ```
 
 

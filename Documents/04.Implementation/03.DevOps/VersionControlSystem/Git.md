@@ -4,6 +4,8 @@
 
 [지옥에서 온 Git](https://opentutorials.org/course/2708/15606)
 
+[Git개념설명](https://blog.naver.com/good_ray/221844822318)
+
 ### 용어
 
 **Stage**: commit 대상
@@ -134,6 +136,25 @@ $ git branch -a
 ```
 $ git branch --delete bn
 ```
+
+### 잘못 생성된 commit 삭제
+
+```
+$ git rebase --oneto BranchName~삭제시작commit번호 BranchName~남기기시작commit번호 BranchName
+```
+
+```
+git log --oneline
+1 (HEAD) commit
+2
+...
+7
+8
+7번부터 2번commit 삭제시:
+git rebase --oneto master~7 master~1 master
+```
+
+
 
 ### CheckOut 실패하는 경우 (Branch 이동 실패)
 
