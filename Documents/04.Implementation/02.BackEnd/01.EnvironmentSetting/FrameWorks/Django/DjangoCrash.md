@@ -85,15 +85,15 @@ django-admin startproject hellodjango
 +hellodjango
 	+hellodjango
         +__init__.py
-        +asgi.py
+        +asgi.py : Async server gateway interface, django 3.0 추가기능
         +settings.py 
         : 전역 설정파일, 모든 설정은 대문자로, 상수로 취급
         : SECRET_KEY - Django 프로젝트 생성시마다 랜덤, Django의 보안시스템에 사용
         : DEBUG - 디버깅모드 여부, 운영에선 False로 설정
         : https: //docs. djangoproject. com/en/stable/topics/settings/
         : https: //docs. djangoproject. com/en/stable/ref/settings/
-        +urls.py
-        +wsgi.py
+        +urls.py: 최상위 레벨의 URL 라우팅 제어
+        +wsgi.py: Web server gateway interface
 +manage.py : django 명령어 실행기
 ```
 
