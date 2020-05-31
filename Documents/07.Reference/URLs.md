@@ -8,6 +8,8 @@
 
 [CheatSheet](https://github.com/DemiHwang/pysheeet)
 
+[https://suwoni-codelab.com/tag/#/Python/page6](https://suwoni-codelab.com/tag/#/Python/page6)
+
 ## Django
 
 [Django 공식문서](https://docs.djangoproject.com/ko/3.0/)

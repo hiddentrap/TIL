@@ -6,6 +6,8 @@
 
 [Git개념설명](https://blog.naver.com/good_ray/221844822318)
 
+[https://milooy.wordpress.com/2017/06/21/working-together-with-github-tutorial/](https://milooy.wordpress.com/2017/06/21/working-together-with-github-tutorial/)
+
 ### 용어
 
 **Stage**: commit 대상

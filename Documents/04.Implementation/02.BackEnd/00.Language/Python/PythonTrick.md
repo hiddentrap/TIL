@@ -1,7 +1,3 @@
-
-
-
-
 # Python Trick
 
 [정리필요](https://dailyheumsi.tistory.com/224?category=855210)
@@ -1770,9 +1766,233 @@ False
 
 ```
 
-### Iterator
+### Iterator & Generators
+
+아래는 그냥 교육적인 목적이고, 실지로는 이렇게 잘 안만들 쓴다.
+
+왜냐, generator랑 yield로 더 쉽게 만들 수 있기 때문.
+
+[https://hiddentrap.tistory.com/149](https://hiddentrap.tistory.com/149)
 
 looping 가능한 객체: `__iter__`와 `__next__`구현 필요
 
+실제로는, Iterator를 만들려면 클래스 기반으로 `__iter__`와 `__next__`, StopIteration 프로토콜을 구현하면 되는데, 이를 함수 기반으로 yield를 이용한 Iterator생성 방법인 Generator를 사용한다. Generator는 함수의 실행흐름이 종료되면 StopIteration 예외를 발생시킨다.
 
+"**Generator  produce a sequence of results while a regular function produces a single return value**"
+
+yiedl: 함수에서 실행을 일시정지 시켜놓고 값을 caller한테 돌려준다.
+
+```python
+class BoundedRepeater:
+    def __init__(self, value, max_repeats):
+        self.value = value
+        self.max_repeats = max_repeats
+        self.count = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.count >= self.max_repeats:
+            raise StopIteration
+        self.count += 1
+        return self.value
+    
+def bounded_repeater(value, max_repeats):
+    count = 0
+    while True:
+        if count >= max_repeats:
+            return
+        count += 1
+        yield value
+        
+def bounded_repeater(value, max_repeats):
+    for i in range(max_repeats):
+        yield value
+
+```
+
+`__iter__`: 초기값 세팅하고 return 으로 자기 자신
+
+`__next__`: 이터레이션시 리턴 값 구현 및 이터레이션 끝에서 rais StopIteration
+
+yield: return 처럼 caller에 값을 넘겨주지만 return 은 실행시점에 callee의 상태값을 모두 날려 버린다. 하지만 yield 실행 시점에 callee의 상태값과 실행중인 포인트를 임시로 저장해놓는다.
+
+**1. 이터레이터와 제네레이터**
+
+PS, 이터레이션이 가능한 객체란, for item in items: 구문에 사용할 수 있는 items
+
+**1.1 이터레이터 (클래스)**
+
+이터레이션이 가능한 객체 생성용 클래스 : **__iter__** (초기값 세팅용으로 self 리턴), **__next__**(이터레이션시 리턴 값)을 구현하는 클래스로 이터레이션 끝에 도달하면 **raise StopIteration** 으로 예외 발생시켜주면 됨
+
+**1.2 제네레이터 (함수)**
+
+이터레이터 만들려면 귀찮으니까 좀 더 편하게 이터레이션이 가능한 객체를 만들어주는 함수 : yield 를 하나 이상 사용하면 제네레이터임. yield 는 return 하고 똑같이 값을 리턴해주는데 차이점은 return은 해당 시점에서 함수 실행을 끝내 버리지만 **yield는 해당 시점에 값을 리턴할뿐 객체와 상태값을 유지**하고 있음.
+
+**1.3 제네레이터 함수 표현식** : 익명함수 처럼 쓰는법
+
+my_list = [1, 3, 6, 10]
+a = (x**2 for x in my_list) // a는 이터레이션 가능 객체가 됨
+
+sum(x**2 for x in my_list) // 이런식으로 함수 안에서도 사용 가능
+
+**1.4 제네레이터 장점**: 이터레이터 클래스 정의보다 간편(코드가 짧다)하고 효율적(리스트 마냥 전체 데이터를 메모리에 올려놓을 필요 없이 그때 그때 필요한 데이터 하나만 올려 놓는다)임
+
+### Generator 표현식
+
+my_list = [1, 3, 6, 10]
+a = (x**2 for x in my_list) // a는 이터레이션 가능 객체가 됨
+
+sum(x**2 for x in my_list) // 이런식으로 함수 안에서도 사용 가능
+
+Generator 표현식과 List 컴플리헨션과 차이점
+
+- 모든데이터를 다 만들어 놓지 않고 필요 시점에 하나씩만 만든다
+- 리턴이 리스트가 아니고 제네레이터 객체이다.
+- next()로 제네레이터를 호출해줘야 값이 생성된다. next(a)
+- list()로 리스트 겍체로 변환할 수 있다.
+- 제네레이터는 한반 사용되면 다시 시작하거나 재사용될 수 없으므로 다시 생성해서 사용해야 한다.
+
+```python
+genexpr = (expression for item in collection if condition)
+
+def generator():
+    for item in collection:
+        if condition:
+            yield expression
+```
+
+이런식으로도 사용가능
+
+```python
+for x in ('Bom dia' for i in range(3)):
+    print(x)
+    
+sum((x * 2 for x in range(10)))
+90
+```
+
+### Iterator 체인
+
+Iterator Chain = 중첩 제네레이터 = pipeline in unix
+
+## Ch7. Dictionary Trick
+
+### Dictionary.get(key,default)
+
+EAFP: 허락보다 용서가 쉽다 코딩 스타일 ㅋㅋㅋ : 파이썬 스타일
+
+- 오류 코드를 사용하는 예외가 없으면 오류 처리를 논리의 기본 흐름에 직접 포함시켜야 한다.
+- 예외로 인해 메인 플로우가 중단되므로 예외적인 경우가 아닌 로컬로 처리를 할 수 있다.
+- EAFP와 결합된 예외는 오류 코드 예외를 쉽게 무시할 수 없기 때문에 우수하다.
+
+검사를 수행하지 않고 일단 실행하고 예외처리를 진행
+
+LBYL: 도약하기전에 확인해라 코딩 스카일ㅋㅋㅋ
+
+실행하기전에 에러가 날만한 요소들을 조건절로 검사하고 수행
+
+```python
+# Bad code LBYL
+def greeting(userid):
+    if userid in name_for_userid:
+        return 'Hi %s!' % name_for_userid[userid]
+    else:
+        return 'Hi there!'
+    
+# Good code EAFP
+def greeting(userid):
+    try:
+        return 'Hi %s!' % name_for_userid[userid]
+    except KeyError:
+        return 'Hi there'
+    
+# BEST code Dictionary.get(key,default value)
+def greeting(userid):
+    return 'Hi %s!' % name_for_userid.get(userid, 'there')
+```
+
+### Dict 정렬
+
+key로 정렬: sorted(dict.items())
+
+value로 정렬: sorted(dict.items(), key=lambda x: x[1])
+
+역정렬: sorted( , ,reverse = True)
+
+### Switch/Case 따라하기
+
+```python
+if cond == 'cond_a':
+	handle_a()
+elif cond == 'cond_b':
+    handle_b()
+else:
+    handle_default()
+    
+
+func_dict = {
+    'cond_a' : handle_a,
+    'cond_b' : handle_b,
+}
+
+func_dict.get(cond, handle_default)()
+
+
+def func_dict(cond):
+    return {
+        'cond_a': handle_a,
+        'cond_b': handle_b,
+    }.get(cond, lambda: None)()
+func_dict(cond)
+
+def dispatch_dict(opr, x, y):
+    return{
+        'add': lambda: x+y,
+        'sub': lambda: x-y,
+        'mul': lambda: x*y,
+        'div': lambda: x/y,
+    }.get(opr, lambda:None)()
+dispatch_dict('mu',2,8)
+
+#프로덕션 레벨에선 위 코드를 실행할때마다 lambda 함수들이 임시로 생성되기 때문에 미리 상수로 생성해놓을 필요가 있다.
+
+```
+
+### Dict 합치기
+
+```python
+xs = {'a':1, 'b':2}
+ys = {'b':3, 'c':4}
+
+zs = {}
+zs.update(xs)
+zs.update(ys)
+
+zs = {**xs, **ys} # 이게 더 빠르고 좋음
+```
+
+### Dict Printing
+
+```python
+>>> mapping = {'a' : 23, 'b' : 42, 'c' : 0xc0ffee}
+>>> str(mapping)
+{'b' : 42, 'c' : 12648430, 'a' : 23}
+
+
+import json
+json.dumps(mapping, indent=4, sort_keys=True)
+{
+"a": 23,
+"b": 42,
+"c": 12648430
+}
+# 단점은 primitive type만 된다 딴거 껴있으면 에러
+# 복합구조도 안됨
+
+# 그래서 결론은, 
+import pprint
+pprint.pprint(mapping)
+```
 
