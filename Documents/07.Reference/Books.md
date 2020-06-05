@@ -4,7 +4,7 @@
 
 ##### [Done] Django Crash Course Cover Python 3.8 and Django 3.x
 
-##### [ ] Django for APIs: Build web APIs with Python & Django
+##### [Done] Django for APIs: Build web APIs with Python & Django
 
 ##### [ ] Django for Professionals: Production websites with Python & Django
 
@@ -15,7 +15,7 @@
 
 
 - Best Books for Learning Python
-  - [Python Crash Course](https://realpython.com/best-python-books/#python-crash-course)
+  - **Done** [Python Crash Course](https://realpython.com/best-python-books/#python-crash-course)
   - [Head-First Python, 2nd edition](https://realpython.com/best-python-books/#head-first-python-2nd-edition)
   - [Invent Your Own Computer Games with Python, 4th edition](https://realpython.com/best-python-books/#invent-your-own-computer-games-with-python-4th-edition)
   - [Think Python: How to Think Like a Computer Scientist, 2nd edition](https://realpython.com/best-python-books/#think-python-how-to-think-like-a-computer-scientist-2nd-edition)
@@ -23,7 +23,7 @@
   - [Learn Python 3 the Hard Way](https://realpython.com/best-python-books/#learn-python-3-the-hard-way)
   - [Real Python Course, Part 1](https://realpython.com/best-python-books/#real-python-course-part-1)
 - Best Intermediate and Advanced Python Books
-  - [Python Tricks: A Buffet of Awesome Python Features](https://realpython.com/best-python-books/#python-tricks-a-buffet-of-awesome-python-features)
+  - **Done** [Python Tricks: A Buffet of Awesome Python Features](https://realpython.com/best-python-books/#python-tricks-a-buffet-of-awesome-python-features)
   - [Fluent Python: Clear, Concise, and Effective Programming](https://realpython.com/best-python-books/#fluent-python-clear-concise-and-effective-programming)
   - [Effective Python: 59 Ways to Write Better Python](https://realpython.com/best-python-books/#effective-python-59-ways-to-write-better-python)
   - 파이썬 클린코드
@@ -91,3 +91,7 @@ You can buy this book [here](https://geni.us/vrzz).
 This book is for all learners. You can use it as a step by step guide, a quick reference or a refresher. The author covers a great amount of information and makes some boring topics interesting through examples. The author seems to know a developer’s mindset perfectly – while reading if you seem to have a doubt, it will be cleared as the next thing in the book! The author touches upon all the domains – e-commerce, finance, banking by giving use cases from each of these enabling developers to use the techniques and guidance in their projects. The book also explains Django channels to solve problems related to event-driven programming, using Redis, WebSocket, and bootstrap. There are some errors in the code, but debugging and correcting them is a good way to self-learn. If you are stuck, you can find the working code in GitHub, so the errors are not a big deal. It’s a great purchase for everyone who wants to keep in touch with Django.
 
 You can buy this book [here](https://geni.us/MRJFKC3).
+
+
+
+[https://django-orm-cookbook-ko.readthedocs.io/en/latest/query.html](https://django-orm-cookbook-ko.readthedocs.io/en/latest/query.html)

@@ -1,0 +1,592 @@
+# CSS
+
+## Grid - 2차원
+
+[https://css-tricks.com/snippets/css/complete-guide-grid/](https://css-tricks.com/snippets/css/complete-guide-grid/)
+
+### 용어정리
+
+#### Grid Container
+
+Display: grid가 적용되는 요소로 모든 grid item들의 직계부모
+
+```html
+<div class="container"> # Grid Container
+	<div class="item item-1"> </div>
+    <div class="item item-2"> </div>
+    <div class="item item-3"> </div>
+</div>
+```
+
+#### Grid Item
+
+Grid Container의 직계 자식
+
+```html
+<div class="container">
+  <div class="item"> </div> # Grid Item
+  <div class="item"> # Grid Item
+    <p class="sub-item"> </p> # # Grid Item 아님
+  </div>
+  <div class="item"> </div> # Grid Item
+</div>
+```
+
+#### Grid Line
+
+그리드 구조를 만들때 면을 나누는 선으로
+
+- column grid lines : 수직선
+- row grid lines : 수평선
+- 모서리 선
+
+#### Grid Cell
+
+그리드 구조에서 선으로 나뉘어지는 면
+
+#### Grid Track
+
+그리드 구조에서 면으로 구성된 줄
+
+#### Grid Area
+
+그리드 구조에서 면들의 조합으로 이루어진 사각형면
+
+### example
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="grid">
+        <div>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Esse aliquid laboriosam minima ex praesentium recusandae reprehenderit unde sit tempore atque aut commodi quae expedita corrupti, dignissimos architecto. Eius, maiores ad?</div>
+        <div>Quibusdam, eos esse dolorum facere voluptatem eius, dolore quas totam aspernatur obcaecati harum? Nihil eligendi eos minus odit minima earum incidunt rem fugit reprehenderit, molestiae possimus eveniet itaque laudantium excepturi.</div>
+        <div>Ducimus quibusdam inventore delectus doloribus dignissimos. Dignissimos quos officia minus exercitationem perspiciatis harum iusto molestiae deleniti quod sunt amet recusandae autem, neque doloremque ad alias eaque consequuntur nesciunt quis eius!</div>
+        <div>Cumque aspernatur ex ipsum dolorum eius, tempore omnis minus sequi architecto totam sunt maxime nemo, ab repellendus. Aut voluptatem saepe voluptatibus nisi ipsum. Debitis corporis culpa ipsa error nemo doloribus.</div>
+        <div>Consequatur dolore, architecto quos saepe consequuntur libero minus totam? Enim optio provident commodi corporis officiis, sunt maiores? Cupiditate consequuntur, cumque natus corporis velit sunt ad magni aliquid facere deleniti molestiae.</div>
+        <div>Voluptatibus similique modi voluptatum voluptatem quo quod minima ducimus facere, sequi libero accusamus nisi nobis? Minima error tempore quo esse quod odit, deleniti labore nulla ullam velit nemo neque sint!</div>
+        <div>Qui, corporis delectus? Pariatur vel autem commodi, accusantium, voluptate obcaecati iste, a debitis facilis repellendus mollitia. Dolore dicta totam, quaerat omnis accusantium magni alias voluptates eligendi ex id aut dolorem?</div>
+        <div>Recusandae tempora ab error omnis exercitationem illo accusamus esse sit ipsa accusantium iure, possimus ducimus quis consequuntur qui corporis nobis culpa repudiandae! Suscipit, debitis. Omnis delectus at vitae laborum quos?</div>
+        <div>Dolorem saepe accusamus sed placeat porro ex, ab, vel eaque libero incidunt facilis delectus, iure odio dicta error consequuntur perspiciatis quasi? Corrupti incidunt quia asperiores quo magnam at minima laudantium?</div>
+        <div>Dolor ad saepe, nemo fugit tempora autem est fugiat quis porro atque nam repellendus maxime neque voluptatem rerum amet odit aspernatur voluptates iusto eos laboriosam enim vel. Eius, debitis beatae!</div>
+    </div>
+</body>
+
+</html>
+<style>
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        /* This is better for small screens, once min() is better supported */
+        /* grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr)); */
+        grid-gap: 1rem;
+        /* This is the standardized property now, but has slightly less support */
+        /* gap: 1rem */
+    }
+    
+    .grid>div {
+        background: #EDE7F6;
+        padding: 1.5rem;
+        border-radius: 1rem;
+    }
+    
+    body {
+        margin: 2rem;
+        font: 12px system-ui;
+    }
+</style>
+```
+
+#### Grid Container 속성
+
+##### display
+
+요소를 grid container로 선언한다.
+
+- grid: block-level (여러개의 grid container레이아웃시 수직으로 쌓는다)
+- inline-grid: inline-level (여러개의 grid container레이아웃시 수평으로 붙인다)
+- 중첩 grid container는 : [참고링크](https://rachelandrew.co.uk/archives/2018/04/27/grid-level-2-and-subgrid/)
+
+```css
+.container {
+  display: grid | inline-grid;
+}
+```
+
+##### grid-template-columns
+
+##### grid-template-rows 면 분할 및 크기 지정
+
+```css
+.container {
+  grid-template-columns: 40px 50px auto 50px 40px;
+  grid-template-rows: 25% 100px auto;
+}
+
+.container {
+  grid-template-columns: [first] 40px [line2] 50px [line3] auto [col4-start] 50px [five] 40px [end];
+  grid-template-rows: [row1-start] 25% [row1-end] 100px [third-line] auto [last-line];
+}
+
+.container {
+  grid-template-rows: [row1-start] 25% [row1-end row2-start] 25% [row2-end];
+}
+
+.container {
+  grid-template-columns: repeat(3, 20px [col-start]);
+}
+
+.container {
+  grid-template-columns: 20px [col-start] 20px [col-start] 20px [col-start];
+}
+
+.item {
+  grid-column-start: col-start 2;
+}
+
+.container {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.container {
+  grid-template-columns: 1fr 50px 1fr 1fr;
+}
+
+
+
+```
+
+##### grid-template-area 영역분할
+
+```python
+.item-a {
+  grid-area: header;
+}
+.item-b {
+  grid-area: main;
+}
+.item-c {
+  grid-area: sidebar;
+}
+.item-d {
+  grid-area: footer;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 50px 50px 50px 50px;
+  grid-template-rows: auto;
+  grid-template-areas: 
+    "header header header header"
+    "main main . sidebar"
+    "footer footer footer footer";
+}
+
+.container {
+  grid-template:
+    [row1-start] "header header header" 25px [row1-end]
+    [row2-start] "footer footer footer" 25px [row2-end]
+    / auto 50px auto;
+}
+
+.container {
+  grid-template-rows: [row1-start] 25px [row1-end row2-start] 25px [row2-end];
+  grid-template-columns: auto 50px auto;
+  grid-template-areas: 
+    "header header header" 
+    "footer footer footer";
+}
+
+
+```
+
+##### column-gap
+
+##### row-gap
+
+##### grid-column-gap
+
+##### grid-row-gap 라인 두께
+
+```css
+.container {
+  grid-template-columns: 100px 50px 100px;
+  grid-template-rows: 80px auto 80px; 
+  column-gap: 10px;
+  row-gap: 15px;
+}
+
+.container {
+  grid-template-columns: 100px 50px 100px;
+  grid-template-rows: 80px auto 80px; 
+  gap: 15px 10px;
+}
+```
+
+##### justify-items 수평정렬
+
+```css
+.container {
+  justify-items: start | end | center | stretch;
+}
+```
+
+##### align-item 수직정렬
+
+```css
+.container {
+  align-items: start | end | center | stretch;
+}
+```
+
+##### justfiy-content 사이즈 및 수평정렬
+
+```css
+.container {
+  justify-content: start | end | center | stretch | space-around | space-between | space-evenly;    
+}
+```
+
+##### align-content 사이즈 및 수직정렬
+
+```css
+.container {
+  align-content: start | end | center | stretch | space-around | space-between | space-evenly;    
+}
+```
+
+## FlexBox - 1차원
+
+https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+
+[생성Tool](https://demo.agektmr.com/flexbox/)
+
+### 컨테이너속성
+
+#### display
+
+```css
+.container {
+  display: flex; /* or inline-flex */
+}
+```
+
+#### flex-direction 방향
+
+```css
+.container {
+  flex-direction: row | row-reverse | column | column-reverse;
+}
+```
+
+#### flex-wrap 줄바꿈
+
+```css
+.container {
+  flex-wrap: nowrap | wrap | wrap-reverse;
+}
+```
+
+#### flex-flow 방향+줄바꿈
+
+```css
+.container {
+  flex-flow: column wrap;
+}
+```
+
+#### justify-content 수평정렬
+
+```css
+.container {
+  justify-content: flex-start | flex-end | center | space-between | space-around | space-evenly | start | end | left | right ... + safe | unsafe;
+}
+```
+
+#### align-items 수직정렬
+
+```css
+.container {
+  align-items: stretch | flex-start | flex-end | center | baseline | first baseline | last baseline | start | end | self-start | self-end + ... safe | unsafe;
+}
+```
+
+#### justify-content 여백정렬
+
+```css
+.container {
+  align-content: flex-start | flex-end | center | space-between | space-around | space-evenly | stretch | start | end | baseline | first baseline | last baseline + ... safe | unsafe;
+}
+```
+
+### 아이템속성
+
+#### order 정렬순서
+
+```css
+.item {
+  order: 5; /* default is 0 */
+}
+```
+
+#### flex-grow 확장배수
+
+```css
+.item {
+  flex-grow: 4; /* default 0 */
+}
+```
+
+#### flex-shrink 축소배수
+
+```css
+.item {
+  flex-shrink: 3; /* default 1 */
+}
+```
+
+#### flex-basis 기준배수
+
+```css
+.item {
+  flex-basis:  | auto; /* default auto */
+}
+```
+
+#### flex 확장+축소+기준 배수
+
+```css
+.item {
+  flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]
+}
+```
+
+#### align-self 정렬
+
+```css
+.item {
+  align-self: auto | flex-start | flex-end | center | baseline | stretch;
+}
+```
+
+### Example
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="flex-container">
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+        <div>4</div>
+        <div>5</div>
+        <div>6</div>
+    </div>
+</body>
+
+</html>
+<style>
+    .flex-container {
+        /* We first create a flex layout context */
+        display: flex;
+        /* Then we define the flow direction 
+           and if we allow the items to wrap 
+         * Remember this is the same as:
+         * flex-direction: row;
+         * flex-wrap: wrap;
+         */
+        flex-flow: row wrap;
+        /* Then we define how is distributed the remaining space */
+        justify-content: space-around;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+    
+    .flex-container>div {
+        background: tomato;
+        padding: 5px;
+        width: 200px;
+        height: 150px;
+        margin-top: 10px;
+        line-height: 150px;
+        color: white;
+        font-weight: bold;
+        font-size: 3em;
+        text-align: center;
+    }
+</style>
+```
+
+#### Navigator
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <ul class="navigation">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Products</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+</body>
+
+</html>
+<style>
+    .navigation {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: flex-end;
+        list-style: none;
+        margin: 0;
+        background: deepskyblue;
+    }
+    
+    .navigation a {
+        text-decoration: none;
+        display: block;
+        padding: 1em;
+        color: white;
+    }
+    
+    .navigation a:hover {
+        background: #1565C0;
+    }
+    
+    @media all and (max-width: 800px) {
+        .navigation {
+            justify-content: space-around;
+        }
+    }
+    
+    @media all and (max-width: 600px) {
+        .navigation {
+            flex-flow: column wrap;
+            padding: 0;
+        }
+        .navigation a {
+            text-align: center;
+            padding: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .navigation li:last-of-type a {
+            border-bottom: none;
+        }
+    }
+</style>
+```
+
+#### Layout
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="wrapper">
+        <header class="header">Header</header>
+        <article class="main">
+            <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae
+                est. Mauris placerat eleifend leo.</p>
+        </article>
+        <aside class="aside aside-1">Aside 1</aside>
+        <aside class="aside aside-2">Aside 2</aside>
+        <footer class="footer">Footer</footer>
+    </div>
+</body>
+
+</html>
+<style>
+    .wrapper {
+        display: flex;
+        flex-flow: row wrap;
+        font-weight: bold;
+        text-align: center;
+    }
+    
+    .wrapper>* {
+        padding: 10px;
+        flex: 1 100%;
+    }
+    
+    .header {
+        background: tomato;
+    }
+    
+    .footer {
+        background: lightgreen;
+    }
+    
+    .main {
+        text-align: left;
+        background: deepskyblue;
+    }
+    
+    .aside-1 {
+        background: gold;
+    }
+    
+    .aside-2 {
+        background: hotpink;
+    }
+    
+    @media all and (min-width: 600px) {
+        .aside {
+            flex: 1 0 0;
+        }
+    }
+    
+    @media all and (min-width: 800px) {
+        .main {
+            flex: 3 0px;
+        }
+        .aside-1 {
+            order: 1;
+        }
+        .main {
+            order: 2;
+        }
+        .aside-2 {
+            order: 3;
+        }
+        .footer {
+            order: 4;
+        }
+    }
+    
+    body {
+        padding: 2em;
+    }
+</style>
+```
+
