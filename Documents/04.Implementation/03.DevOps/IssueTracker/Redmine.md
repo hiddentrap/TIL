@@ -1,5 +1,6 @@
 # Redmine
 
+<<<<<<< HEAD
 ## Install Redmine with docker
 
 1. 아래와 같이 최신 redmine Docker 이미지를 다운로드 받습니다. 
@@ -147,3 +148,10 @@ $ mv redmine_ckeditor-master/ redmine_ckeditor
 $ rm master.zip
 ```
 
+=======
+- sudo --login
+- docker ps / docker restart id
+- cd /volume2/@docker/btrfs/subvolumes/dcd4552c3558d65900987b40c027a46d7f5abb5ec467ba0dc280a2d6f3ab70cf/home/redmine/redmine
+- docker exec -i -t synology_redmine /bin/bash
+- cd plugins
+>>>>>>> b8d1b360e2dc176e5f33d6bc4f01b1d906dd2e62
