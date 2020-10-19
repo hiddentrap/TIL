@@ -20,7 +20,7 @@ pip install --upgrade pip --trusted-host pypi.org --trusted-host files.pythonhos
 pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org -r requirements.txt
 ```
 
-### 파이참 터미널 한글 깨짐
+### 파이참 파이썬 콘솔 한글 깨짐
 
 Ctrl+Alt+S
 
