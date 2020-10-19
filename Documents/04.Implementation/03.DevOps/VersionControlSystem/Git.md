@@ -209,3 +209,71 @@ $ git commit --ammend -m "New commit message"
 $ git push --force branch-name
 ```
 
+## 자주쓰는 명령어
+
+## remote
+
+- add remote `git remote add origin <url>`
+- change remote `git remote set-url origin <url>`
+- remove remote `git remote -v` `git remote rm <destination>`
+
+## commit, push, fetch, pull
+
+- push forcely `git push origin master --force` `git push origin master -f`
+- pull forcely `git fetch --all` `git reset --hard origin/master`
+
+- fetch file forcely `git fetch` `git checkout origin/master <filepath>`- cancel commit `git reset HEAD~`
+
+## config
+
+- cache `git config --global credential.helper "cache --timeout=86400"`
+- logout `echo -e "host=github.com\nprotocol=https\n" | git credential-osxkeychain erase` `git config --global --unset user.name` `git config --global --unset user.email`
+
+## add only py
+
+```
+git add ./\*.py
+```
+
+## create branch
+
+```
+git checkout -b [name_of_your_new_branch]
+```
+
+## rename branch
+
+```
+git push <REMOTENAME> <LOCALBRANCHNAME>:<REMOTEBRANCHNAME>
+```
+
+## remove local branch
+
+```
+git branch -d the_local_branch
+```
+
+## remove remote branch
+
+```
+git push origin :the_remote_branch
+```
+
+## sparse
+
+```
+git init` `git remote add -f origin <url>` `git config core.sparseCheckout true
+echo "some/dir/" >> .git/info/sparse-checkout
+```
+
+## checkout
+
+```
+git checkout <branch>` `git pull
+```
+
+## push branch
+
+```
+git push origin <branch_from>:<branch_to>
+```
