@@ -116,7 +116,7 @@ addopts = -s
 ```
 test작성
 코드작성
-mypy -type 
+mypy / pytype / pyright /...-type 
 pytest -xv code.py
 yapf -i code.py or black code.py
 flake8 code.py or pylint code.py

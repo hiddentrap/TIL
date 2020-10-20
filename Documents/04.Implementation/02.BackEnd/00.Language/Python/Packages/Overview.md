@@ -122,3 +122,54 @@
 
 #이미지 프로세싱
 
+## Libclod
+
+#클라우드 #API #1API to Multi 클라우드
+
+## Behold
+
+#print 스타일 #디버깅
+
+## Bottle
+
+#웹 #프레임워크 #미니멀리즘
+
+## EbookLib
+
+#epub
+
+## Gooey
+
+#argparse #CLI to GUI #argparse addon 
+
+## Invoke
+
+#원격실행
+
+## Nuitka
+
+#C컴파일 #C #실행파일
+
+## Numba
+
+#고속 #연산속도향상
+
+## Peewee
+
+#orm #database #미니
+
+## PyFilesystem
+
+#파일시스템 #파일조작
+
+## Pyinstaller
+
+#컴파일 #실행파일
+
+## Scrapy
+
+#스크래핑
+
+## Splinter
+
+#테스트 #브라우저 자동화

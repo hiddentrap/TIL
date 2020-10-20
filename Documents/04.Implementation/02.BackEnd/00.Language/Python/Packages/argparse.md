@@ -1,5 +1,7 @@
 # Argparse (파라메터 파서)
 
+Gooey로 GUI로 확장 가능
+
 ```python
 def get_args():
     """parameter parser"""
