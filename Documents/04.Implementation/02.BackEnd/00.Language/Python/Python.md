@@ -103,6 +103,12 @@ E 에러
 + 실제값
 
 1. test function 이름은 test_ 로 시작해야함
+
+pytest중에 print로 찍을 수 있게 만들기
+프로젝트 루트에 pytest.ini 만들고
+[pytest]
+addopts = -s
+
 ```
 
 ### 절차
@@ -110,6 +116,7 @@ E 에러
 ```
 test작성
 코드작성
+mypy -type 
 pytest -xv code.py
 yapf -i code.py or black code.py
 flake8 code.py or pylint code.py
