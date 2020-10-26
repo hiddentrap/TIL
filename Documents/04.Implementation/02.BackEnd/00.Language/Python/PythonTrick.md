@@ -1140,57 +1140,56 @@ b' x00x02x03*'
 
 일단 그냥 리스트 쓰고, 성능 튜닝 필요하게 되면 가이드대로 수정하자.
 
-### Record, Structs, DTO 구현
+### Record, Structs, DTO (Data Transfer Object) 구현
 
 #### dict
 
 ```python
 car1 = {
-' color' : ' red' ,
-' mileage' : 3812. 4,
-' automatic' : True,
+'color' : 'red' ,
+'mileage' : 3812,
+'automatic' : True,
 }
 car2 = {
-' color' : ' blue' ,
-' mileage' : 40231,
-' automatic' : False,
+'color' : ' blue' ,
+'mileage' : 40231,
+'automatic' : False,
 }
 # Dicts have a nice repr:
 >>> car2
-{' color' : ' blue' , ' automatic' : False, ' mileage' : 40231}
+{'color' : ' blue' , 'automatic' : False, 'mileage' : 40231}
 # Get mileage:
->>> car2[' mileage' ]
+>>> car2['mileage' ]
 40231
 # Dicts are mutable:
->>> car2[' mileage' ] = 12
->>> car2[' windshield' ] = ' broken'
+>>> car2['mileage' ] = 12
+>>> car2['windshield' ] = 'broken'
 >>> car2
-{' windshield' : ' broken' , ' color' : ' blue' ,
-' automatic' : False, ' mileage' : 12}
+{'windshield' : 'broken' , 'color' : 'blue' ,
+'automatic' : False, 'mileage' : 12}
 # No protection against wrong field names,
 # or missing/extra fields:
 car3 = {
-' colr' : ' green' ,
-174
-5.3. Records, Structs, and Data Transfer Objects
-' automatic' : False,
-' windshield' : ' broken' ,
+'color' : 'green' ,
+'mileage': 174
+'automatic' : False,
+'windshield' : 'broken' ,
 }
 ```
 
 #### tuple
 
-index스로만 접근 가능해서 가독성에 안좋다.
+index로만 접근 가능해서 가독성에 안좋다.
 
 ```python
 # Fields: color, mileage, automatic
->>> car1 = (' red' , 3812. 4, True)
->>> car2 = (' blue' , 40231. 0, False)
+>>> car1 = ('red' , 3812.4, True)
+>>> car2 = ('blue' , 40231.0, False)
 # Tuple instances have a nice repr:
 >>> car1
-(' red' , 3812. 4, True)
+('red' , 3812. 4, True)
 >>> car2
-(' blue' , 40231. 0, False)
+('blue' , 40231. 0, False)
 # Get mileage:
 >>> car2[1]
 40231. 0
@@ -1200,7 +1199,7 @@ TypeError:
 "'tuple' object does not support item assignment"
 # No protection against missing/extra fields
 # or a wrong order:
->>> car3 = (3431. 5, ' green' , True, ' silver' )
+>>> car3 = (3431.5, 'green' , True, 'silver' )
 ```
 
 #### 클래스로 정의
@@ -1211,15 +1210,15 @@ class Car:
 	self. color = color
 	self. mileage = mileage
 	self. automatic = automatic
->>> car1 = Car(' red' , 3812. 4, True)
->>> car2 = Car(' blue' , 40231. 0, False)
+>>> car1 = Car('red' , 3812.4, True)
+>>> car2 = Car('blue' , 40231.0, False)
 
 # Get the mileage:
->>> car2. mileage
-40231. 0
+>>> car2.mileage
+40231.0
 # Classes are mutable:
->>> car2. mileage = 12
->>> car2. windshield = ' broken'
+>>> car2.mileage = 12
+>>> car2.windshield = ' broken'
 # String representation is not very useful
 # (must add a manually written __repr__ method):
 >>> car1
@@ -1234,18 +1233,18 @@ class Car:
 
 ```python
 >>> from collections import namedtuple
->>> Car = namedtuple(' Car' , ' color mileage automatic' )
->>> car1 = Car(' red' , 3812. 4, True)
+>>> Car = namedtuple('Car' , 'color mileage automatic' )
+>>> car1 = Car('red' , 3812.4, True)
 # Instances have a nice repr:
 >>> car1
-Car(color=' red' , mileage=3812. 4, automatic=True)
+Car(color='red' , mileage=3812.4, automatic=True)
 # Accessing fields:
->>> car1. mileage
-3812. 4
+>>> car1.mileage
+3812.4
 # Fields are immtuable:
->>> car1. mileage = 12
-AttributeError: "can' t set attribute"
->>> car1. windshield = ' broken'
+>>> car1.mileage = 12
+AttributeError: "can't set attribute"
+>>> car1.windshield = 'broken'
 AttributeError:
 "'Car' object has no attribute 'windshield'"
 ```
@@ -1260,23 +1259,23 @@ class Car(NamedTuple):
 	color: str
 	mileage: float
 	automatic: bool
->>> car1 = Car(' red' , 3812. 4, True)
+>>> car1 = Car('red' , 3812.4, True)
 # Instances have a nice repr:
 >>> car1
-Car(color=' red' , mileage=3812. 4, automatic=True)
+Car(color='red' , mileage=3812.4, automatic=True)
 # Accessing fields:
->>> car1. mileage
-3812. 4
+>>> car1.mileage
+3812.4
 # Fields are immutable:
->>> car1. mileage = 12
-AttributeError: "can' t set attribute"
->>> car1. windshield = ' broken'
+>>> car1.mileage = 12
+AttributeError: "can't set attribute"
+>>> car1.windshield = 'broken'
 AttributeError:
 "'Car' object has no attribute 'windshield'"
 # Type annotations are not enforced without
 # a separate type checking tool like mypy:
->>> Car(' red' , ' NOT_A_FLOAT' , 99)
-Car(color=' red' , mileage=' NOT_A_FLOAT' , automatic=99)
+>>> Car('red' , ' NOT_A_FLOAT' , 99)
+Car(color='red' , mileage=' NOT_A_FLOAT' , automatic=99)
 ```
 
 #### struct.Struct
